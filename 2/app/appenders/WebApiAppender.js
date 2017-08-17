@@ -1,5 +1,5 @@
 define(['GenericAppender'], function (GenericAppender) {
-    WebApiAppender.prototype = GenericAppender;
+    WebApiAppender.prototype = GenericAppender.prototype;
 
     function WebApiAppender() {
         this.log = function(level, msg) {

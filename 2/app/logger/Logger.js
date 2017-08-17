@@ -8,8 +8,8 @@ requirejs.config({
     }
 });
 
-define(['AlertWindowAppender', 'ConsoleAppender', 'WebApiAppender', 'WindowAppender'],
-    function (AlertWindowAppender, ConsoleAppender, WebApiAppender, WindowAppender) {
+define(['AlertWindowAppender', 'ConsoleAppender', 'WebApiAppender', 'WindowAppender', 'GenericAppender'],
+    function (AlertWindowAppender, ConsoleAppender, WebApiAppender, WindowAppender, GenericAppender) {
 
         let levels = {
             DEBUG: {
@@ -53,8 +53,13 @@ define(['AlertWindowAppender', 'ConsoleAppender', 'WebApiAppender', 'WindowAppen
             },
 
             addAppender: function (appender) {
-                if (appender)
-                    this.appenders.push(appender);
+                try {
+                    if (appender instanceof GenericAppender)
+                        this.appenders.push(appender);
+                    else throw new Error("Appender must extend GenericAppender!");
+                } catch (e) {
+                    this.handleException(e);
+                }
             },
 
             logMessage: function logMessage(level, msg) {
@@ -67,14 +72,14 @@ define(['AlertWindowAppender', 'ConsoleAppender', 'WebApiAppender', 'WindowAppen
                 }
             },
 
-            handleException: function (errorMsg, url, lineNumber) {
-                console.log("[Unhandled error]: " + errorMsg);
+            handleException: function (exc) {
+                console.log("%c[Unhandled error]: " + exc, 'color: red');
             }
         };
 
         function Logger() {
             window.onerror = (errorMsg, url, lineNumber) => {
-                this.handleException(errorMsg, url, lineNumber);
+                this.logMessage(levels.ERROR, errorMsg + ' at ' + url + ':' + lineNumber);
                 return true;
             }
         }

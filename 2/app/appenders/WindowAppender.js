@@ -1,5 +1,5 @@
 define(['GenericAppender'], function (GenericAppender) {
-    WindowAppender.prototype = GenericAppender;
+    WindowAppender.prototype = GenericAppender.prototype;
 
     function WindowAppender() {
         this.log = function (level, msg) {

@@ -1,4 +1,4 @@
-require(['./logger/Logger'], function (Logger) {
+require(['./logger/Logger', './appenders/BrokenAppender'], function (Logger, BrokenAppender) {
     let logger = new Logger();
 
     /*** Build-in appenders ***/
@@ -7,10 +7,15 @@ require(['./logger/Logger'], function (Logger) {
     logger.addAppender(new logger.WebApiAppender());
     logger.addAppender(new logger.WindowAppender());
 
-    logger.debug('This is DEBUG level');
-    logger.info('This is INFO level');
-    logger.warn('This is WARN level');
-    logger.error('This is ERROR level');
+    /*** Error in case of violating contract ***/
+    logger.addAppender(new BrokenAppender()); // Appender without method log
+    logger.addAppender({}); // Appender don't extend GenericAppender
 
+    logger.debug('This is DEBUG message');
+    logger.info('This is INFO message');
+    logger.warn('This is WARN message');
+    logger.error('This is ERROR message');
+
+    /*** Handling exceptions ***/
     throw new Error('TEST ERROR');
 });
