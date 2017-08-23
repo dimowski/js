@@ -4,7 +4,7 @@ require(['./logger/Logger', './appenders/BrokenAppender'], function (Logger, Bro
     /*** Build-in appenders ***/
     logger.addAppender(new logger.AlertWindowAppender());
     logger.addAppender(new logger.ConsoleAppender());
-    logger.addAppender(new logger.WebApiAppender());
+    logger.addAppender(new logger.WebApiAppender('POST', 'http://localhost:8080/test/log'));
     logger.addAppender(new logger.WindowAppender());
 
     /*** Error in case of violating contract ***/

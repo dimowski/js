@@ -1,10 +1,10 @@
 define(['GenericAppender'], function (GenericAppender) {
     WebApiAppender.prototype = GenericAppender.prototype;
 
-    function WebApiAppender() {
+    function WebApiAppender(method, uri) {
         this.log = function(level, msg) {
             let xhttp = new XMLHttpRequest();
-            xhttp.open('POST', 'http://localhost:8080/test/log', false);
+            xhttp.open(method, uri, false);
             xhttp.setRequestHeader("Content-type", "application/text");
             xhttp.send('[' + level.label + '] ' + msg);
         }
